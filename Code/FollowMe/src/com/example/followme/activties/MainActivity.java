@@ -3,7 +3,9 @@ package com.example.followme.activties;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockListActivity;
@@ -34,13 +36,16 @@ public class MainActivity extends SherlockListActivity {
 		setListAdapter(adapter);
 
 	}
-	
-	
-	
-	
-	
-	
-	
+
+	/**
+	 * List Item Click.
+	 */
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		super.onListItemClick(l, v, position, id);
+		startActivity(new Intent(this, MapActivity.class));
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -48,20 +53,11 @@ public class MainActivity extends SherlockListActivity {
 
 		mSearch = new SearchView(this);
 		mSearch.setIconifiedByDefault(true);
-		
+
 		MenuItem m = menu.findItem(R.id.blz);
-		
-		
-	//	menu.add("").setActionView(mSearch);
-		
+
 		m.setActionView(mSearch);
-		
-		
-		
-		
-		
-//		menu.add("").setActionView(mSearch)
-//				.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
 		return true;
 	}
 

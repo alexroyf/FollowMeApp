@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.example.followme.R;
 
-public class LogIn extends Activity implements OnClickListener {
+public class LogInActivity extends Activity implements OnClickListener {
 
 	private static final int DELAY = 2000; // 2s
 
