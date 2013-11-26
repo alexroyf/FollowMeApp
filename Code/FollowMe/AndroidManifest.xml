@@ -22,7 +22,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/Theme.Sherlock.Light" >
         <activity
             android:name="com.example.followme.activties.MainActivity"
             android:label="@string/app_name"
@@ -30,13 +30,18 @@
         <activity
             android:name="com.example.followme.activties.LogInActivity"
             android:label="@string/app_name"
-            android:noHistory="true" >
+            android:noHistory="true"
+            android:theme="@style/Theme.Sherlock.Light.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <activity 
+            android:name="com.example.followme.activties.MapActivity"
+            android:label="Maps"></activity>
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"

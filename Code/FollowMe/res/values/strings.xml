@@ -9,5 +9,8 @@
     <string name="enter">Enter</string>
     <string name="wrong_login_message">User Name/Password incorrect</string>
     <string name="please_wait">Please Wait!</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <string name="erase">Erase</string>
 
 </resources>

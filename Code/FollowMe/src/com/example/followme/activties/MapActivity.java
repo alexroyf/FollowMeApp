@@ -12,12 +12,14 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import com.example.followme.enums.MapState;
 import com.example.followme.utils.DirectionsJSONParser;
 import com.example.followme.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -27,13 +29,22 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.Toast;
 
-public class MapActivity extends FragmentActivity {
+public class MapActivity extends FragmentActivity implements OnClickListener {
 	GoogleMap map;
 	ArrayList<LatLng> markerPoints;
 	private LatLng mFirstPoint;
 	private LatLng mLastPoint;
+	private boolean bRouteFound = false;
+	private MapState mState;
+
+	// Views
+	private Button mStart;
+	private Button mErase;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +53,14 @@ public class MapActivity extends FragmentActivity {
 
 		// Initializing
 		this.markerPoints = new ArrayList<LatLng>();
+
+		mState = MapState.Stopped;
+
+		mStart = (Button) findViewById(R.id.start_button);
+		mStart.setOnClickListener(this);
+
+		mErase = (Button) findViewById(R.id.erase_button);
+		mErase.setOnClickListener(this);
 
 		// Getting reference to SupportMapFragment of the activity_main
 		SupportMapFragment fm = (SupportMapFragment) this
@@ -58,6 +77,11 @@ public class MapActivity extends FragmentActivity {
 
 			@Override
 			public void onMapClick(LatLng point) {
+
+				if (bRouteFound) {
+					return;
+				}
+
 				// Already two locations
 				if (MapActivity.this.markerPoints.size() > 1) {
 					MapActivity.this.markerPoints.clear();
@@ -85,6 +109,7 @@ public class MapActivity extends FragmentActivity {
 					options.icon(BitmapDescriptorFactory
 							.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 					mLastPoint = point;
+					bRouteFound = true;
 				}
 
 				// Add new marker to the Google Map Android API V2
@@ -96,8 +121,8 @@ public class MapActivity extends FragmentActivity {
 					LatLng dest = MapActivity.this.markerPoints.get(1);
 
 					// Getting URL to the Google Directions API
-					String url = MapActivity.this.getDirectionsUrl(origin,
-							dest);
+					String url = MapActivity.this
+							.getDirectionsUrl(origin, dest);
 
 					DownloadTask downloadTask = new DownloadTask();
 
@@ -105,7 +130,7 @@ public class MapActivity extends FragmentActivity {
 					downloadTask.execute(url);
 				}
 			}
-			
+
 		});
 	}
 
@@ -233,9 +258,9 @@ public class MapActivity extends FragmentActivity {
 		protected void onPostExecute(List<List<HashMap<String, String>>> result) {
 			ArrayList<LatLng> points = null;
 			PolylineOptions lineOptions = null;
-			MarkerOptions markerOptions = new MarkerOptions();
 
-			if (result.size() < 1) {
+			if (result == null || result.size() < 1) {
+				mErase.performClick();
 				Toast.makeText(MapActivity.this.getBaseContext(), "No Points",
 						Toast.LENGTH_SHORT).show();
 				return;
@@ -250,32 +275,48 @@ public class MapActivity extends FragmentActivity {
 				List<HashMap<String, String>> path = result.get(i);
 
 				// Fetching all the points in i-th route
-//				for (int j = 0; j < path.size(); j++) {
-//					HashMap<String, String> point = path.get(j);
-//					
-//					double lat = Double.parseDouble(point.get("lat"));
-//					double lng = Double.parseDouble(point.get("lng"));
-//					LatLng position = new LatLng(lat, lng);
-//					points.add(position);
-//				}
+				for (int j = 0; j < path.size(); j++) {
+					HashMap<String, String> point = path.get(j);
+					if (point.containsKey("lat")) {
+						double lat = Double.parseDouble(point.get("lat"));
+						double lng = Double.parseDouble(point.get("lng"));
+						LatLng position = new LatLng(lat, lng);
+						points.add(position);
+					}
+				}
 
 				// Adding all the points in the route to LineOptions
-				points.add(mFirstPoint);
-				points.add(mLastPoint);
 				lineOptions.addAll(points);
-				lineOptions.width(2);
-				lineOptions.color(Color.RED);
+				lineOptions.width(5);
+				lineOptions.color(Color.BLUE);
 			}
 
 			// Drawing polyline in the Google Map for the i-th route
-			MapActivity.this.map.addPolyline(lineOptions);
+			map.addPolyline(lineOptions);
 		}
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		this.getMenuInflater().inflate(R.menu.main, menu);
-		return true;
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.erase_button:
+			bRouteFound = false;
+			markerPoints.clear();
+			map.clear();
+			break;
+		case R.id.start_button:
+			if (mState == MapState.Running) {
+				mState = MapState.Stopped;
+				mStart.setText(R.string.start);
+			} else if (mState == MapState.Stopped) {
+				mState = MapState.Running;
+				mStart.setText(R.string.stop);
+			}
+			break;
+
+		default:
+			break;
+		}
+
 	}
 }
