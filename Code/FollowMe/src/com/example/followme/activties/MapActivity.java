@@ -12,33 +12,32 @@ import java.util.List;
 
 import org.json.JSONObject;
 
-import com.example.followme.enums.MapState;
-import com.example.followme.utils.DirectionsJSONParser;
-import com.example.followme.R;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
-
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.followme.ApplicationParameters;
+import com.example.followme.R;
+import com.example.followme.enums.MapState;
+import com.example.followme.utils.DirectionsJSONParser;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+
 public class MapActivity extends FragmentActivity implements OnClickListener {
 	GoogleMap map;
 	ArrayList<LatLng> markerPoints;
-	private LatLng mFirstPoint;
-	private LatLng mLastPoint;
 	private boolean bRouteFound = false;
 	private MapState mState;
 
@@ -104,11 +103,9 @@ public class MapActivity extends FragmentActivity implements OnClickListener {
 				if (MapActivity.this.markerPoints.size() == 1) {
 					options.icon(BitmapDescriptorFactory
 							.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-					mFirstPoint = point;
 				} else if (MapActivity.this.markerPoints.size() == 2) {
 					options.icon(BitmapDescriptorFactory
 							.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-					mLastPoint = point;
 					bRouteFound = true;
 				}
 
@@ -293,6 +290,11 @@ public class MapActivity extends FragmentActivity implements OnClickListener {
 
 			// Drawing polyline in the Google Map for the i-th route
 			map.addPolyline(lineOptions);
+			
+			Intent intent = new Intent(ApplicationParameters.ACTION_START_MONITORING);
+			intent.putParcelableArrayListExtra(ApplicationParameters.POLYLINE_KEY, points);
+			
+			startService(intent);
 		}
 	}
 
