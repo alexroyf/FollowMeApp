@@ -32,7 +32,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 public class MapActivity extends FragmentActivity implements OnClickListener {
@@ -305,6 +304,8 @@ public class MapActivity extends FragmentActivity implements OnClickListener {
 			bRouteFound = false;
 			markerPoints.clear();
 			map.clear();
+			Intent intent = new Intent(ApplicationParameters.ACTION_STOP_MONITORING);
+			startService(intent);
 			break;
 		case R.id.start_button:
 			if (mState == MapState.Running) {
