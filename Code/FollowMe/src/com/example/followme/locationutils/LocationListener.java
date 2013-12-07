@@ -2,14 +2,12 @@ package com.example.followme.locationutils;
 
 import java.util.ArrayList;
 
+import android.location.Location;
+import android.os.Bundle;
+
 import com.example.followme.ApplicationParameters;
 import com.example.followme.interfaces.ILocationListener;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Polyline;
-
-import android.graphics.Point;
-import android.location.Location;
-import android.os.Bundle;
 
 public class LocationListener implements android.location.LocationListener {
 
@@ -45,7 +43,9 @@ public class LocationListener implements android.location.LocationListener {
 			}
 			
 			if (shortestDistance > ApplicationParameters.OFF_COURSE_DISTANCE) {
-				mListener.onOffTrack(shortestDistance);
+				mListener.onOffTrack(false, shortestDistance);
+			} else {
+				mListener.onOffTrack(true, shortestDistance);
 			}
 			
 		} else {

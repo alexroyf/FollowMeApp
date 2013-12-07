@@ -2,7 +2,7 @@ package com.example.followme.interfaces;
 
 public interface ILocationListener {
 	
-	public void onOffTrack(float distance);
+	public void onOffTrack(boolean onTrack, float distance);
 	
 	public void noGpsSignal();
 

@@ -1091,11 +1091,12 @@ containing a value of this type.
         public static final int common_signin_btn_text_pressed_light=0x7f020087;
         public static final int green_button=0x7f020088;
         public static final int ic_launcher=0x7f020089;
-        public static final int ic_plusone_medium_off_client=0x7f02008a;
-        public static final int ic_plusone_small_off_client=0x7f02008b;
-        public static final int ic_plusone_standard_off_client=0x7f02008c;
-        public static final int ic_plusone_tall_off_client=0x7f02008d;
-        public static final int red_button=0x7f02008e;
+        public static final int ic_notifaction=0x7f02008a;
+        public static final int ic_plusone_medium_off_client=0x7f02008b;
+        public static final int ic_plusone_small_off_client=0x7f02008c;
+        public static final int ic_plusone_standard_off_client=0x7f02008d;
+        public static final int ic_plusone_tall_off_client=0x7f02008e;
+        public static final int red_button=0x7f02008f;
     }
     public static final class id {
         public static final int abs__action_bar=0x7f050024;
@@ -1338,9 +1339,13 @@ containing a value of this type.
         public static final int enter=0x7f06002c;
         public static final int erase=0x7f060031;
         public static final int hello_world=0x7f060029;
+        public static final int no_gps_signal=0x7f060032;
+        public static final int off_track=0x7f060035;
+        public static final int on_track=0x7f060034;
         public static final int password=0x7f06002b;
         public static final int please_wait=0x7f06002e;
         public static final int start=0x7f06002f;
+        public static final int start_service=0x7f060033;
         public static final int stop=0x7f060030;
         public static final int wrong_login_message=0x7f06002d;
     }

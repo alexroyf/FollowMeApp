@@ -2,32 +2,39 @@ package com.example.followme.services;
 
 import java.util.ArrayList;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.location.Location;
 import android.location.LocationManager;
+import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
-import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
 import com.example.followme.ApplicationParameters;
+import com.example.followme.R;
+import com.example.followme.interfaces.ILocationListener;
 import com.example.followme.locationutils.LocationListener;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
 
-public class LocationService extends Service implements Handler.Callback {
+public class LocationService extends Service implements Handler.Callback, ILocationListener {
 
 	private static final String DEBUG_TAG = LocationService.class.getName();
+
+	private static final int NOTIFACTION_ID = 895;
 
 	// Location
 	private LocationListener mLocListner;
 
 	private Looper mLooper;
 	private Handler mHandler;
+
+	private Notification mNotification;
+	private NotificationManager mNotificationManager;
 
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -43,6 +50,9 @@ public class LocationService extends Service implements Handler.Callback {
 		mLooper = thread.getLooper();
 
 		mHandler = new Handler(mLooper, this);
+
+		mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		startFourground();
 	}
 
 	@Override
@@ -97,4 +107,55 @@ public class LocationService extends Service implements Handler.Callback {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
+	private void startFourground() {
+
+		String tickerText = getResources().getString(R.string.start_service);
+		String titleText = getResources().getString(R.string.app_name);
+		String secodaryText = getResources().getString(R.string.start_service);
+
+		Intent intent = new Intent(ApplicationParameters.ACTION_STOP_MONITORING);
+		PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent,
+				0);
+
+		mNotification = new Notification(R.drawable.ic_notifaction, tickerText,
+				System.currentTimeMillis());
+
+		mNotification.setLatestEventInfo(this, titleText, secodaryText,
+				pendingIntent);
+		mNotification.flags = Notification.FLAG_NO_CLEAR;
+
+		startForeground(NOTIFACTION_ID, mNotification);
+	}
+	
+	@SuppressWarnings("deprecation")
+	private void updateNotifaction(String text) {
+		String titleText = getResources().getString(R.string.app_name);
+		
+		Intent intent = new Intent(ApplicationParameters.ACTION_STOP_MONITORING);
+		PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent,
+				0);
+		
+		mNotification.setLatestEventInfo(this, titleText, text, pendingIntent);
+		
+		mNotificationManager.notify(NOTIFACTION_ID, mNotification);
+	}
+
+	@Override
+	public void onOffTrack(boolean onTrack, float distance) {
+		if (onTrack) {
+			String sOnTrack = getResources().getString(R.string.on_track);
+			updateNotifaction(sOnTrack);
+		} else {
+			String offTrack = getResources().getString(R.string.off_track);
+			updateNotifaction(offTrack + "By: " + distance);
+		}
+		
+	}
+
+	@Override
+	public void noGpsSignal() {
+		String noGps = getResources().getString(R.string.no_gps_signal);
+		updateNotifaction(noGps);
+	}
 }
