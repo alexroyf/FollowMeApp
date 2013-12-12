@@ -16,4 +16,5 @@
 	<string name="start_service">Location Service has started</string>
 	<string name="on_track">Please keep going your on track</string>
 	<string name="off_track">Please return to track you want to far</string>
+	<string name="menu_delete">Delete</string>
 </resources>

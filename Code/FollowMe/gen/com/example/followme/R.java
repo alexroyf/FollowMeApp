@@ -1140,6 +1140,7 @@ containing a value of this type.
         public static final int abs__up=0x7f05000f;
         public static final int action_settings=0x7f05003f;
         public static final int blz=0x7f05003e;
+        public static final int delete_user=0x7f050040;
         public static final int disableHome=0x7f05000d;
         public static final int edit_query=0x7f05002a;
         public static final int erase_button=0x7f05003a;
@@ -1198,6 +1199,7 @@ containing a value of this type.
     }
     public static final class menu {
         public static final int main=0x7f0b0000;
+        public static final int options_user_list_menu=0x7f0b0001;
     }
     public static final class string {
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
@@ -1339,6 +1341,7 @@ containing a value of this type.
         public static final int enter=0x7f06002c;
         public static final int erase=0x7f060031;
         public static final int hello_world=0x7f060029;
+        public static final int menu_delete=0x7f060036;
         public static final int no_gps_signal=0x7f060032;
         public static final int off_track=0x7f060035;
         public static final int on_track=0x7f060034;
@@ -2811,7 +2814,7 @@ containing a value of this type.
          */
         public static final int[] SherlockSpinner = {
             0x010100af, 0x01010175, 0x01010176, 0x0101017b,
-            0x01010262, 0x010102ac, 0x010102ad, 0x0101043a
+            0x01010262, 0x010102ac, 0x010102ad, 0x0101041f
         };
         /**
           <p>
